@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>CpSc 360 Homework #1</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="Microsoft FrontPage 12.0" name=GENERATOR>
+<style type="text/css">
+.style1 {
+	font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</HEAD>
+<BODY bgColor=white leftMargin=0 topMargin=0 MARGINHEIGHT="0" MARGINWIDTH="0">
+<DIV class=page>
+<H2 style="FONT-SIZE: 16pt; COLOR: black; TEXT-ALIGN: center">&nbsp;</H2>
+<H2 style="FONT-SIZE: 16pt; COLOR: black; TEXT-ALIGN: center">
+<font face="Arial">CpSc 3600-001 Homework 1: 
+Layered Communication Software<BR>
+Due Date: January. 30th (by 
+11:59PM)</font></H2>
+<p style="FONT-SIZE: 16pt; COLOR: black; TEXT-ALIGN: center">
+&nbsp;</p>
+<HR>
+
+<P><font face="Arial Black">General Requirement:</font></P>
+
+<P><font face="Arial">Developing a C program to support 
+<EM>half-duplex</EM> layered communication. You are provided with the 
+interface protocols (C function prototypes) for all the layers.&nbsp; You need 
+to implement these layers, including the development of 
+peer-to-peer protocols.&nbsp; You are responsible for implementing the C functions 
+in layers 2,3, 4 and 5 (described below).&nbsp; You do not need to implement layer 1 
+code - I've included a sample layer 1 code along with a sample main 
+program.&nbsp; When testing your submission we will use our own layer 1 that may be 
+very different from the one included here - make sure your code does not depend 
+on any specific layer 1 implementation!</font></P> 
+
+<P>Sample code for l1 is in the fold</P> 
+<HR>
+<P><font face="Arial Black">Layer 1: read/write a single byte:</font></P>
+<P><font face="Arial">Layer 1 interface protocol is specified here, but you don't need to write 
+this layer - just use it. A sample implementation is provided that will support 
+testing of your code - the sample layer will support half-duplex communication 
+using a pipe.</font></P>
+<P><font face="Arial">In layer 1 APIs, each function returns an int that indicates 
+the number of bytes read/written, in this case the return value should be 1 if 
+it is successful, -1 indicates errors.</font></P>
+<P><font color="#0000FF"><B><CODE><font face="Arial">int l1_write(char b);</font></CODE></B><font face="Arial">
+</font> 
+</font> 
+<blockquote>
+<P><font face="Arial"><b>Function:</b>&nbsp; 
+Writes the byte specified by b.<br>
+<b>Returns:</b>&nbsp;&nbsp;&nbsp; 1 on success; -1 on error.</font></blockquote>
+<P><font color="#0000FF"><B><CODE><font face="Arial">int l1_read(char *b);</font></CODE></B><font face="Arial">
+</font> 
+</font> 
+<blockquote>
+<P><font face="Arial"><b>Function:</b>&nbsp;&nbsp;Reads one byte and copies the byte to the address specified by
+</font> 
+<CODE><font face="Arial">b</font></CODE><font face="Arial">.<br>
+<b>Returns:&nbsp;</b>&nbsp;&nbsp;&nbsp;1 on success, -1 on error.</font></blockquote>
+<p><font face="Arial"><B>IMPORTANT:</B> Layer 1 <EM>does</EM> maintain ordering, so that the 
+receiver will receive the first byte sent, before the second byte sent. You can 
+(and should) assume that any layer 1 implementation maintains the order of 
+individual bytes.</font></p>
+<HR>
+<P><font face="Arial Black">Layer 2: read/write a <EM>chunk</EM></font></P>
+<P><font face="Arial">Layer 2 provides transmission/reception of a
+<font color="#0000FF"> <EM>chunk</EM></font>. A chunk is defined as a sequence of bytes whose length is not 
+longer than 10 bytes. Each of 
+the bytes in a chunk can have any value, the only restriction is that there are 
+no more than 10 bytes. It is valid to send/receive a chunk of size 0!</font></P>
+<P><font face="Arial">The important issue in layer 2 is that there must be some agreement 
+(<font color="#0000FF">protocol</font>) between 
+the sender and the receiver as to what constitutes the <font color="#0000FF"> <EM>chunk</EM></font> (how long 
+is the chunk?&nbsp; where is the end?). You must come up with a peer-to-peer protocol 
+and implement the protocol here. The only way for </font> <i> <CODE>
+<font face="Arial" color="#0000FF">l2_write</font></CODE></i><font face="Arial"> to send 
+anything is by using </font> <CODE><font face="Arial" color="#0000FF">l1_write</font></CODE><font face="Arial">, and the only way
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">l2_read</font></CODE></i><font face="Arial"> can retrieve a byte from the sender is by calling
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">l1_read</font></CODE></i><font face="Arial">.</font></P>
+<P><font face="Arial">The return value of each layer 2 function indicates the length of the chunk 
+sent or received (in bytes) upon success, or the value -1 to indicate failure. 
+This return value should reflect the number of bytes in the original chunk, it 
+doesn't count any extra bytes (<font color="#0000FF">header</font>) your layer 2 might use as part of the peer-to-peer 
+protocol.</font></P><font face="Arial"><B>IMPORTANT: </B>The only assumption you can make about 
+<EM>chunks</EM> is that the length is no longer than 10 bytes. The content of a 
+chunk can be anything,  the individual bytes can be anything in a chunk. </font>
+<P></P>
+<P><font color="#0000FF"><B><CODE><font face="Arial">int l2_write(char *chunk, int len);</font></CODE></B><font face="Arial">
+</font>
+</font>
+<blockquote>
+<P><font face="Arial"><b>Function:</b>&nbsp; Sends a chunk starting at the address 
+specified by the first parameter (</font><i><CODE><font face="Arial" color="#0000FF">chunk</font></CODE></i><font face="Arial">) and having length
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">len</font></CODE></i><font face="Arial">. <br>
+<b>Returns:&nbsp; </b>Returns </font> <i> <CODE>
+<font face="Arial" color="#0000FF">len</font></CODE></i><font face="Arial"> 
+on success, -1 means an error occurred.<br>
+<b>Note:&nbsp; </b>You need to handle all errors that can be detected here, this means 
+you need to check for valid values of </font> <i> <CODE>
+<font face="Arial" color="#0000FF">len</font></CODE></i><font face="Arial">, and that you check the 
+return value each time you call </font> <i> <CODE>
+<font face="Arial" color="#0000FF">l1_write</font></CODE></i><font face="Arial">.</font></blockquote>
+<P><font color="#0000FF"><B><CODE><font face="Arial">int l2_read(char *chunk, int max);</font></CODE></B><font face="Arial">
+</font>
+</font>
+<blockquote>
+<P><font face="Arial"><b>Function:</b>&nbsp; Reads a chunk and stores the 
+incoming byes starting at the address specified by the pointer </font> <i> <CODE>
+<font face="Arial" color="#0000FF">chunk</font></CODE></i><font face="Arial">. No more than
+</font> <i> <CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> bytes will be 
+put in to memory, so </font> <i> <CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> 
+limits the size of the chunk read.<br>
+<b>Returns:&nbsp; </b>If a chunk is received by </font> <i> <CODE>
+<font face="Arial" color="#0000FF">l2_read</font></CODE></i><font face="Arial"> that would require more than
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> bytes, </font> <CODE>
+<font face="Arial" color="#0000FF">-1 is returned</font><font face="Arial" color="#000000">
+</font></CODE><font face="Arial">(error). Upon successful reception of a chunk, 
+the size of the chunk is returned.<br>
+<B>Note:</B>&nbsp; Make sure that your </font> <CODE><font face="Arial">l2_read</font></CODE><font face="Arial"> does not allow the 
+sender to overflow the buffer </font> <i> <CODE>
+<font face="Arial" color="#0000FF">chunk</font></CODE></i><font face="Arial">!
+</font>
+</blockquote>
+<HR>
+<P><font face="Arial Black">Layer 3: read/write a message.</font></P>
+<P><font face="Arial">Layer 3 provides the capability to send and receive <EM>messages</EM>, where 
+a message is defined as any sequence of bytes. There is no length limitation at 
+layer 3, so a sender can ask layer 3 to send any size message. The general idea 
+is that your layer 3 implementation needs to use layer 2 to send and receive 
+small chunks, perhaps many times in order to transmit/receive a complete 
+message.</font></P>
+<P><font face="Arial">The main issue at layer 3 is creation of a peer-to-peer protocol that uses 
+chunks to communicate, and the receiver needs to know when it has reached the 
+end of a <EM>message</EM>. Your </font> <i> <CODE>
+<font face="Arial" color="#0000FF">l3_write</font></CODE></i><font face="Arial"> can only call
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">l2_write</font></CODE></i><font face="Arial"> to send data (not
+</font> <i> <CODE><font face="Arial" color="#0000FF">l1_write</font></CODE></i><font face="Arial">), and your
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">l3_read</font></CODE></i><font face="Arial"> can only call
+</font> <i> <CODE><font face="Arial" color="#0000FF">l2_read</font></CODE></i><font face="Arial">.</font></P>
+<P><B><CODE><font face="Arial" color="#0000FF">int l3_write(char *msg, int len);</font></CODE></B></P>
+<blockquote>
+<P><font face="Arial"><b>Function:&nbsp; </b>Sends a message of length </font> 
+<i> <CODE>
+<font face="Arial" color="#0000FF">len</font></CODE></i><font face="Arial">. The bytes sent are specified by 
+the pointer </font> <CODE><font face="Arial">msg</font></CODE><font face="Arial">.&nbsp;&nbsp;
+<br>
+<b>Returns:</b>&nbsp; The number of bytes of sent on success (should be <i>
+<font color="#0000FF">len</font></i>), -1 
+means an error.</font></P>
+</blockquote>
+<P><B><CODE><font face="Arial" color="#0000FF">int l3_read(char *msg, int max);</font></CODE></B></P>
+<blockquote>
+<P><font face="Arial"><b>Function:&nbsp; </b>Reads a message and stores in memory starting at the address specified by the 
+pointer </font> <i> <CODE><font face="Arial" color="#0000FF">msg</font></CODE></i><font face="Arial">. No more than
+</font> <i> <CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> bytes will be put in to 
+memory, so </font> <CODE><font face="Arial">max</font></CODE><font face="Arial"> 
+must limit the size of the message read no matter how large the message was sent 
+by <i><font color="#0000FF">l3_write</font></i>.<br>
+<b>Returns:</b>&nbsp; Return 
+value is the size of the message received or -1 on error. If a message is 
+received by </font> <i> <CODE><font face="Arial" color="#0000FF">l3_read</font></CODE></i><font face="Arial"> that would require more than
+</font> <i> <CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> 
+bytes, </font> <CODE><font face="Arial">l3_read</font></CODE><font face="Arial"> should return -1 (error).</font></P>
+</blockquote>
+<HR>
+<P><font face="Arial Black">Layer 4: read/write a message with error detection</font></P>
+<P><font face="Arial">Layer 4 adds simple error detection to the services provided by layer 3. The 
+function prototypes (which define the interface protocols) looks the same as the 
+layer 3 prototypes, the only difference is that the layer 4 read function should 
+return a -1 (error) if it detects an <EM>error</EM> in the received message. The 
+errors we are looking for here involve transmission errors, we want to try to 
+make sure that the message received is the same as the message that was 
+sent.</font></P>
+<P><font face="Arial"><B>Error Detection:</B> The simplest approach is to use a checksum. To use a 
+checksum you simply add together all the bytes of the original message (just 
+treat each byte as a number) and the checksum is the sum modulo 256 (to fit in a 
+single byte). The result is a single byte that can be sent along with the 
+message data, and the receiving end can go through the same steps (computing the 
+checksum) and then compare the received checksum to the computed checksum. If 
+they don't agree - there was an error. If the checksums do agree, it is 
+<EM>likely</EM> there was no error (but it's not a certainty). Many network 
+protocols use checksums to detect errors, although in general they use checksums 
+larger than a single byte to improve the accuracy of the error detection. Feel 
+free to use whatever you want to detect errors, a single byte checksum is just 
+the easiest to implement. When testing your code we will use a <EM>buggy</EM> 
+layer 1 that does introduce errors, so make sure your error detection works!</font></P>
+<P><B><CODE><font face="Arial" color="#0000FF">int l4_write(char *msg, int len);</font></CODE></B></P>
+<blockquote>
+<P><font face="Arial"><b>Function:&nbsp; </b>Sends a message of length </font> 
+<i> <CODE>
+<font face="Arial" color="#0000FF">len</font></CODE></i><font face="Arial">. The bytes sent are specified by 
+the pointer </font> <CODE><font face="Arial">msg</font></CODE><font face="Arial">.
+<br>
+<b>Returns:&nbsp; </b>Returns the number of bytes of the message sent on 
+success (should be <font color="#0000FF"><i>len</i></font>), -1 means an error. </font></P>
+</blockquote>
+<P><B><CODE><font face="Arial" color="#0000FF">int l4_read(char *msg, int max);</font></CODE></B></P>
+<blockquote>
+<P><code><b><font face="Arial" color="#000000">Function:&nbsp; </font></b>
+</code><font face="Arial">Reads a message in to memory starting at the address specified by the pointer
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">msg</font></CODE></i><font face="Arial">. No more than
+</font> <i> <CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> bytes will be put in to memory, 
+so </font> <i> <CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> must 
+limit the size of the message read.<br>
+<b>Returns:&nbsp; </b>If a message is received by </font> <i> <CODE>
+<font face="Arial" color="#0000FF">l4_read</font></CODE></i><font face="Arial"> that would require more than
+</font> <i> <CODE><font face="Arial" color="#0000FF">max</font></CODE></i><font face="Arial"> 
+bytes, </font> <i> <CODE><font face="Arial" color="#0000FF">l4_read</font></CODE></i><font face="Arial"> should return -1 (error). Some error detection 
+mechanism is used to detect transmission errors. If such an error is detected by
+</font> 
+<i> 
+<CODE><font face="Arial">l4_read</font></CODE></i><font face="Arial">, a -1 will be returned. Upon successful reception of a 
+message, the size of the message (the number of bytes stored in </font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">msg</font></CODE></i><font face="Arial">) is returned.</font></P>
+</blockquote>
+<HR>
+<P><font face="Arial Black">Layer 5: read/write a named value</font></P>
+<P><font face="Arial">Layer 5 will provide higher layers with a mechanism for sending and receiving 
+values that have an associated name. The idea is that we could build an 
+application-level protocol that uses layer 5 to send named values between peer 
+processes. For example, a telephone directory service could be built by having 
+clients send a request that could be either a person's name, or phone number; 
+the server could do the appropriate lookup and send back the appropriate result 
+(as a named value).</font></P>
+<P><font face="Arial">Your layer 5 implementation should use layer 4 for sending and receiving 
+messages (nothing else!). Once again, you need to come up with a peer-to-peer 
+protocol so that your layer 5 functions know what to expect and can work 
+together. It doesn't matter what your peer-to-peer protocol is, as long as your
+</font> 
+<CODE><font face="Arial">l5_write</font></CODE><font face="Arial"> works with your
+</font> <CODE><font face="Arial">l5_read</font></CODE><font face="Arial">.</font></P>
+<P><B><CODE><font face="Arial" color="#0000FF">int l5_write(char *name, int namelen, char *value, int 
+valuelen);</font></CODE></B></P>
+<blockquote>
+<P><code><b><font face="Arial" color="#000000">Function:&nbsp; </font></b>
+</code><font face="Arial">Sends the named value to the receiver. <br>
+<b>Returns:</b>&nbsp; Returns a 1 on success, -1 means an 
+error. </font></P>
+</blockquote>
+<P><B><CODE><font face="Arial" color="#0000FF">int l5_read(char *name, int *namelenptr, char *value, int 
+*valuelenptr);</font></CODE></B></P>
+<blockquote>
+<P><code><b><font face="Arial" color="#000000">Function:&nbsp; </font></b>
+<i>
+<font face="Arial" color="#0000FF">l5_read</font></i></code><font face="Arial"> uses </font> 
+<i> <CODE>
+<font face="Arial" color="#0000FF">l4_read</font></CODE></i><font face="Arial"> to read a named value and on 
+success returns the value 1, and puts the name of the received value at </font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">name</font></CODE></i><font face="Arial"> and the value at
+</font> <i> <CODE><font face="Arial" color="#0000FF">value</font></CODE></i><font face="Arial">. The pointers
+</font> 
+<i> 
+<CODE><font face="Arial" color="#0000FF">namelenptr</font></CODE></i><font face="Arial"> and </font> 
+<i> <CODE>
+<font face="Arial" color="#0000FF">valuelenptr</font></CODE></i><font face="Arial"> are pointers to the sizes 
+of the two buffers when </font> <i> <CODE><font face="Arial" color="#0000FF">l5_read</font></CODE></i><font face="Arial"> 
+is initially called, you must use these values to make sure you don't overflow 
+the buffers.<br>
+<b>Returns:&nbsp; </b>Upon successful return,<font color="#0000FF"> </font> </font> <CODE>
+<font color="#0000FF" face="Arial">*<i>namelenptr</i></font></CODE><font face="Arial"><font color="#0000FF">
+</font>should indicate the number of bytes in the
+</font> 
+<CODE><font face="Arial">name</font></CODE><font face="Arial"> received and
+</font> <font color="#0000FF"> <CODE><font face="Arial">*<i>valuelenptr</i></font></CODE></font><font face="Arial"><font color="#0000FF">
+</font>should indicate the 
+number of bytes in the </font> <i> <CODE><font face="Arial" color="#0000FF">value</font></CODE></i><font face="Arial"> received.
+</font> <i> <CODE><font face="Arial" color="#0000FF">l5_read</font></CODE></i><font face="Arial"> must 
+return a -1 on error.</font></P>
+</blockquote>
+<HR>
+<P><font face="Arial Black">Sample Code and Testing</font></P>
+<P><font face="Arial">The program </font> <CODE>
+<font face="Arial" size="4" color="#0000FF">hw1test.c</font></CODE><font face="Arial"> can be used to test your layer 5 code (which 
+should use your layer 4 code, which, in turn, should use your layer 3 code, ... ).</font></P>
+<P><font face="Arial"><B>IMPORTANT</B>: Although the sample code only accesses the layer 5 
+functions directly, it is necessary that your layers are independent and can 
+work with any other implementation of other layers.&nbsp; For example, we might use a 
+different layer 2 implementation with your layer 3 and 4 code - everything 
+should work correctly! Also keep in mind that when we test your code we will 
+generate error conditions (including introducing some simulated transmission 
+errors by providing a buggy layer 1).</font></P>
+<P><font face="Arial">The test code  might be used as part of an application that uses layer 5 
+to send and receive a name/value pair where both the name and value are C 
+strings (null terminated sequences of bytes). Don't assume that layer 5 will 
+always be used this way, your layer 5 should not care whether or not there is a 
+terminating null!</font></P>
+<P><font face="Arial">The main program calls layer 5 to send or receive these messages depending on 
+whether it finds command line arguments present. If there are 2 command line 
+arguments the program assumes it is a <EM>sender</EM> and sends </font> 
+<CODE><font face="Arial">argv[1]</font></CODE><font face="Arial"> as a name and
+</font> <CODE><font face="Arial">argv[2]</font></CODE><font face="Arial"> as the value. If no 
+command line arguments are detected, the program tries to read a name value pair 
+using </font> <CODE><font face="Arial">l5_read</font></CODE><font face="Arial">. If everything works, the reader program will print 
+the name and value to STDOUT.&nbsp; Using the sample layer 5 code, you can 
+run the program as a sender and pipe the output of the program to another copy 
+of the program running as a receiver:</font></P>
+<CENTER>
+<TABLE border=0>
+  <TBODY>
+  <TR>
+    <TD><PRE><font face="Arial" color="#0000FF">&gt; ./hw1test phone 2766722 | ./hw1test
+Name: phone
+Value: 2766722</font></PRE></TD></TR></TBODY></TABLE>
+</CENTER>
+<P><font face="Arial">There is also a test program that can be used to test layer 3 directly (and 
+layer 2 indirectly). This might give you more ideas about how to test each layer 
+(don't rely on the hw1test.c program alone!). Both of the test programs and a 
+sample Makefile are available in sample code</font><BR>
+</P>
+<HR>
+<P><font face="Arial Black">Deliverables</font></P>
+<P><font face="Arial">You must provide us with one file for each of the 4 layers you will write. 
+The layer 2 code must be in a file named </font> <CODE>
+<font face="Arial" color="#0000FF">l2.c</font></CODE><font face="Arial">, the layer 3 code in
+</font> 
+<CODE><font face="Arial" color="#0000FF">l3.c</font></CODE><font face="Arial">, and so on. Note that each of these files should have both a 
+read and write function (</font><CODE><font face="Arial" color="#0000FF">l2.c</font></CODE><font face="Arial"> should have
+</font> <CODE><font face="Arial" color="#0000FF">l2_read()</font></CODE><font face="Arial"> 
+and </font> <CODE><font face="Arial" color="#0000FF">l2_write()</font></CODE><font face="Arial">, ...).</font></P>
+<P><font face="Arial">You do not need to provide any 
+  code for layer1 or a main program, we will supply our own when testing your code.</font></P>
+<HR>
+<P><font face="Arial Black">General submission requirements</font></P>
+<P>For all the source code files, please include a header like the following,</P>
+<P>/*</P>
+<P> Author: clemson user name, Your Name(optional)</P>
+<P>Filename: l2.c</P>
+<P>Description: This file provides the implementation of Layer 2. </P>
+<P>*/</P>
+<P>Most IDEs should have the ability to let you  do that conviniently using a template.</P>
+<P>Do not put any unused file/ project file / binary file in the compessed package.</P>
+<P>You must also include in your submission a file named   <CODE>README</CODE> 
+  that includes your name and a brief description of your submission. It should have five clearly seperated sections titled with FILE DESCRIPTIONS, KNOWN PROBLEMS, DESIGN, SPECIAL BUILDING INSTRUCTIONS, and OTHER INFORMATION. In the section of FILE DESCRIPTIONS, you may record any information that is not provided in the hearder of source files, like any test input file, if there was any. In the section of KNOW PROBLEMS, write down all the problems or limitations of the program that you know of. Make sure that you understand this will not make your grade worse. Instead, knowing the problem and maybe why is much better than believing your buggy program can run correctly without testing. Please also indicate clearly which part of the submission do not work correctly to which extent, like &quot;can not comile&quot;, or &quot;only producing wrong output for certain inputs&quot;. So, test your program comprehensively before your submission with all the special cases that you can think of. In the section of DESIGN, you can write, if any, why you design your program that way. For the section of SPECIAL BUILDING INSTRUCTIONS, you may record any special enviromental setup needed to comile/run your program. But, usually it should be left blank. </P>
+<P>Organize all your code and file in a flat structure:<br>
+  &nbsp;&nbsp;&nbsp; --sourfile1.c<br>
+    &nbsp;&nbsp;&nbsp; --sourcefile2.c<br>
+    &nbsp;&nbsp;&nbsp; --main.c<br>
+    &nbsp;&nbsp;&nbsp; --Makefile<br>
+  &nbsp;&nbsp;&nbsp; --README</P>
+	<P>and make sure you use the provided command to compress your files under the directory that contains those files. ( that will make sure your file names are the same as what we need. And after decompression, the file will be generated into the same directory where the tgz file is placed)<br>
+  </P>
+	<P>Without specific explaination, you will need to provide a Makefile that can generate the 
+	executables with the name described in homework assignment. (If a Makefile was provided, please do not change the target names).<br class="style1">
+  </P>
+<HR>
+<P><font face="Arial Black">Grading</font></P>
+<P><font face="Arial">Your project will be tested to make sure it works properly - a large part of 
+this testing will make sure that your functions generate errors (<font color="#0000FF">return -1</font>) when 
+appropriate. Here are the specifics of the grading:</font></P>
+<TABLE border=0 width="263">
+  <TBODY>
+  <TR>
+    <TH width="214">
+    <p align="left"><font face="Arial">Layer 2</font></TH>
+    <TD width="39"><b><font face="Arial">20%</font></b></TD>
+  <TR>
+    <TH width="214">
+    <p align="left"><font face="Arial">Layer 3</font></TH>
+    <TD width="39"><b><font face="Arial">20%</font></b></TD>
+  <TR>
+    <TH width="214">
+    <p align="left"><font face="Arial">Layer 4</font></TH>
+    <TD width="39"><b><font face="Arial">20%</font></b></TD>
+  <TR>
+    <TH width="214">
+    <p align="left"><font face="Arial">Layer 5</font></TH>
+    <TD width="39"><b><font face="Arial">20%</font></b></TD>
+  <TR>
+    <TH width="214">
+    <p align="left"><font face="Arial">Style/Code structure, etc.</font></TH>
+    <TD width="39"><b><font face="Arial">10%</font></b></TD>
+  <tr>
+    <TH width="219">
+    <p align="left"><font face="Arial">Submission</font></TH>
+    <TD width="34"><b><font face="Arial">10%</font></b></TD>
+  </tr>
+  </TBODY></TABLE>
+<P><font face="Arial">NOTE: if you submit the homework, you will get 10%, no 
+matter it is finished or not. 10% of your homework grade depends on the how well we can understand 
+your code. For this assignment, it would be hard to create crummy/sloppy code 
+(since you are forced to provide 8 individual functions). Feel free to write 
+more than the 8 required functions, but keep in mind that we will test each of 
+your layers in isolation (so each file needs to be a complete implementation of 
+a layer). </font> </P>
+<P><font face="Arial">The tests for each of your layers will be run independently, so errors in 
+your layer 2 code will not propagate to your layer 3 code... </font> </P>
+<HR>
+
+<P><font face="Arial Black">Submitting your files</font></P>
+<P><font face="Arial">Please first zip all your files using following command:</font>
+<P>
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; tar&nbsp;&nbsp; cvzf&nbsp;&nbsp; 
+yourname_hw1.tgz&nbsp;&nbsp; l2.h&nbsp;&nbsp; l2.c&nbsp;&nbsp; l3.h&nbsp;&nbsp; 
+l3.c&nbsp;&nbsp; l4.h&nbsp;&nbsp; l4.c&nbsp;&nbsp; l5.h&nbsp;&nbsp; l5.c&nbsp;&nbsp;&nbsp;README</font>
+<P><span class="style1">where 
+  yourname is the your clemson user name.</span>
+<P><font face="Arial">
+Please make sure you submit all your source files not the object files.&nbsp; 
+Before you submit this single file, please use 
+the following command to check and make sure you have everything in this zip file:</font>
+<P>
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+&gt; tar&nbsp;&nbsp; tvzf&nbsp;&nbsp; yourname_hw1.tgz</font><P><font face="Arial">All projects must be submitted via handin: </font>
+	<span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;,&quot;serif&quot;;
+mso-fareast-font-family:SimSun;mso-fareast-theme-font:minor-fareast;mso-ansi-language:
+EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA">
+	<a href="https://handin.cs.clemson.edu">https://handin.cs.clemson.edu</a></span><P><font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><P align="center"><font face="Arial"><B>Don't send compiled code!</B></font></P>
+<HR>
+
+<P><font face="Arial Black">Error report</font></P>
+<P><font face="Arial">If you find any error in this assignment, please send me 
+an email at <a href="mailto:luofeng@clemson.edu?subject=Error Report"><i>
+luofeng</i></a><i><a href="mailto:luofeng@clemson.edu?subject=Error Report">@clemson.edu</a></i>. 
+A correct error report will be rewarded with 1 bonus point.</font><P>&nbsp;</P>
+</DIV></BODY></HTML>

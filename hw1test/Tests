@@ -1,0 +1,62 @@
+Layer 2:
+
+simple string: Sends the string "Hello" with null.
+
+sending ints: Sends each of the integers 0-1000 (as 4 bytes)
+
+zero length test: chunk of size 0
+
+write chunk too large test: sends chunk of size 11
+
+read buffer size test: sends chunk, but read has too small buffer
+     (l2_read should catch as an error) Also checks for overflow.
+
+write forced l1 error test: l1_write returns error (so should l2_write)
+
+read forced l1 error test: l1_read returns error (so should l2_read)
+
+
+Layer 3:
+
+small string test: sends single short string (size 6)
+
+long string test: sends single long string (size 1000)
+
+message length tests: tries lots of message sizes
+
+message content test: tries different byte values (all of them)
+
+message too big for buffer test: overflow test
+
+forced write error: l2_write returns error
+
+forced read error: l2_read returns error
+
+
+Layer 4:
+
+small string test: sends single short string (size 6)
+
+long string test: sends single long string (size 1000)
+
+message too big for buffer test: overflow test
+
+forced write error: l3_write returns error
+
+forced read error: l3_read returns error
+
+Checksum error: force failed checksum (mess up one byte)
+
+Layer 5:
+
+small strings test: name and value are short strings
+
+long string test: name and value are long strings
+
+byte values test: long name/val all the byte values
+
+overflow test: check for buffer overflow
+
+forced write error: l4_write returns error
+
+forced read error: l4_read returns error

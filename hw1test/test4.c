@@ -7,12 +7,12 @@
 #include <unistd.h>    // read() and write() prototypes are here
 #include <string.h>
 #include "l1.h"
-  
+
 //------------------------------------------------------------------
 // layer 2 implementation
 
 // l2_write sends a single byte that indicates the size of the chunk
-//  (values 0 - 10 are legal) 
+//  (values 0 - 10 are legal)
 // followed by the data.
 
 int l2_write(char *chunk, int len) {
@@ -172,8 +172,8 @@ int main(int argc,char **argv) {
   else {
     test = atoi (argv[1]);
   }
-  
-  if (! test || test == 1) {  
+
+  if (! test || test == 1) {
     // try a small string
     init_l1(); err=0;
     printf("** l4 small string test: ");
@@ -204,7 +204,7 @@ int main(int argc,char **argv) {
     }
   }
 
-  if (! test || test == 2) {  
+  if (! test || test == 2) {
     // try a large string
     memset(inbuff,'H',1000);
     inbuff[1000]=0;
@@ -235,16 +235,16 @@ int main(int argc,char **argv) {
     else {
       printf ("\n!! Grading Test Result : Layer 4 test case 2 passed.\n");
     }
-  }    
-  
-  if (! test || test == 3) {  
+  }
+
+  if (! test || test == 3) {
     // force read buffer to be too small
     // check for overflow!
     for (i=0;i<100;i++) {
   	buff[i]=0;
   	inbuff[i]=-1;
     }
-  
+
     init_l1(); err=0;
     printf("** l4 message too big for buffer test: ");
     if (l4_write(inbuff,100)==-1) {
@@ -270,8 +270,8 @@ int main(int argc,char **argv) {
       printf ("\n!! Grading Test Result : Layer 4 test case 3 passed.\n");
     }
   }
-  
-  if (! test || test == 4) {  
+
+  if (! test || test == 4) {
     // force write error in layer 3
     init_l1(); err=0;
     printf("** l4 forced write error: ");
@@ -289,8 +289,8 @@ int main(int argc,char **argv) {
       printf ("\n!! Grading Test Result : Layer 4 test case 4 passed.\n");
     }
   }
-  
-  if (! test || test == 5) {  
+
+  if (! test || test == 5) {
     // force read error in layer 3
     init_l1(); err=0;
     printf("** l4 forced read error: ");
@@ -313,8 +313,8 @@ int main(int argc,char **argv) {
       printf ("\n!! Grading Test Result : Layer 4 test case 5 passed.\n");
     }
   }
-  
-  if (! test || test == 6) {  
+
+  if (! test || test == 6) {
     // Finally - the good stuff
     // mess with the checksum!
     init_l1(); err=0;
@@ -322,7 +322,7 @@ int main(int argc,char **argv) {
   	buff[i]=0;
   	inbuff[i]=i;
     }
-  
+
     printf("** l4 Checksum error: ");
     generror=5;
     if (l4_write(inbuff,100)==-1) {
@@ -345,11 +345,7 @@ int main(int argc,char **argv) {
   }
 
   if (! test)
-  printf("*** Layer 4 score (20 points max): %.1f\n",calc_score(errcount,6,20)); 
+  printf("*** Layer 4 score (20 points max): %.1f\n",calc_score(errcount,6,20));
   return(0);
 
 }
-
-
-
-      

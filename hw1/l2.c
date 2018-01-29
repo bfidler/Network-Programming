@@ -2,6 +2,7 @@
 #include "l1.h"
 #include "l2.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 int l2_write(char * chunk, int len){
    int ret = 0,
@@ -46,7 +47,7 @@ int l2_read(char * chunk, int max){
    }
 
   l1_read(&temp);
-
+  printf("2: %d\n", len);
 	if ((l1_read(&end) != -1 && max >= len)&& temp == (char) 28 && end == (char) 3)
 		return len;
 	else

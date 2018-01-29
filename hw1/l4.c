@@ -39,7 +39,7 @@ int l4_read(char *msg, int max)
 
   //reading the message and getting the length of the message read
   read = l3_read(readMsg, max + 1);
-
+  printf("4: %d\n", read);
   //checking for errors reading from layer3 and message size too big
   if(read == -1 || read > max + 1)
     return -1;

@@ -15,8 +15,8 @@ all: l3test
 
 # here is the rule for building hw1test
 
-#hw1test: hw1test.o l2.o l3.o l4.o l5.o
-#	gcc -o hw1test hw1test.o l2.o l3.o l4.o l5.o
+hw1test: hw1test.o l2.o l3.o l4.o l5.o
+	 gcc -o hw1test hw1test.o l2.o l3.o l4.o l5.o
 
 # here is the rule for building l3test
 

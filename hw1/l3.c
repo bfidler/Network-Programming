@@ -46,8 +46,8 @@ int l3_read(char *msg, int max)
 
       read += i;
       if (i < temp) return (-1);
-      if (*(msg + read - 1) == (char) 3 && *(msg + read - 2) == (char) 29){
-	       return (read - 2); printf("3: %d\n", read - 2); }
+      if (*(msg + read - 1) == (char) 3 && *(msg + read - 2) == (char) 29)
+	       return (read - 2);
    }
 
    if (read == max)

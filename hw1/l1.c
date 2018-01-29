@@ -53,3 +53,9 @@ int l1_write(char b) {
       return(1);
   }
 }
+
+// scoring function
+double calc_score(int nerrors, int total, int points) {
+
+  return(  ((total-nerrors)/((double) total)) * points);
+}

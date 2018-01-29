@@ -1,6 +1,5 @@
 #include "l4.h"
 #include "l5.h"
-#include <stdio.h>
 
 int l5_write(char *name, int namelen, char *value, int valuelen) {
 
@@ -29,7 +28,7 @@ int l5_read(char *name, int *namelenptr, char *value, int *valuelenptr) {
   //making sure name of value were read properly
   if(readName == -1 || readVal == -1)
     return -1;
-  printf("5: %d %d\n",readName, readVal);
+
   //checking to see if name or value overflow buffer
   if(readName > *namelenptr || readVal > *valuelenptr)
     return -1;

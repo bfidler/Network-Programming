@@ -1,25 +1,29 @@
-# Makefile for HW1 test programs
-
-# Here is a rule for building .o files from .c files
-# the -Wall option tells gcc to print all warning messages
-
 .c.o:
 	gcc -c -Wall $<
 
-# if you just type "make", this is the default target
-#  (since it is the first one defined). You can also 
-# explicitly tell make to do this by typing "make all"
+tests: test2 test3 test4 test5
 
-#all: hw1test l3test
-all: l3test
+OBJT5= test5.o l5.o l1.o
 
-# here is the rule for building hw1test
+test5: ${OBJT5}
+	gcc -o test5 ${OBJT5}
 
-hw1test: hw1test.o l2.o l3.o l4.o l5.o
-	 gcc -o hw1test hw1test.o l2.o l3.o l4.o l5.o
+OBJT4= test4.o l4.o l1.o
 
-# here is the rule for building l3test
+test4: ${OBJT4}
+	gcc -o test4 ${OBJT4}
 
-l3test: l3test.o l2.o l3.o 
-	gcc -o l3test l3test.o l2.o l3.o 
+
+OBJT3= test3.o l3.o l1.o
+
+test3: ${OBJT3}
+	gcc -o test3 ${OBJT3}
+
+OBJT2= test2.o l2.o l1.o
+
+test2: ${OBJT2}
+	gcc -o test2 ${OBJT2}
+
+clean: 
+	rm *.o test5 test4 test3 test2 *~
 

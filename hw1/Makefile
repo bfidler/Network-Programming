@@ -24,6 +24,5 @@ OBJT2= test2.o l2.o l1.o
 test2: ${OBJT2}
 	gcc -o test2 ${OBJT2}
 
-clean: 
-	rm *.o test5 test4 test3 test2 *~
-
+clean:
+	rm *.o test5 test4 test3 test2 hw1test *~

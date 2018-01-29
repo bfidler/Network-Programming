@@ -1,4 +1,12 @@
+/*
 
+Author: bfidler
+
+Filename: l2.c
+
+Description: This file provides implementation for Layer 2.
+
+*/
 #include "l1.h"
 #include "l2.h"
 #include <stdbool.h>

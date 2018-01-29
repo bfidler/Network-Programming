@@ -1,0 +1,24 @@
+FILE DESCRIPTIONS
+  l5 has a read and write which sends a name and value using l4
+  l4 uses a checksum and l3 to write/read messages
+  l3 reads/writes messages in chunks of 10 using l2 - has a header attached
+  l2 reads/writes individual bytes using l1 - has a header attached
+
+KNOWN PROBLEMS
+  My protocol for l2 and l3 are special char (28 & 29 respectively) and char 3,
+  which is the end of the file. I supposed the transmission could be disrupted
+  if the wrong chars could be sent in the middle of the file. A longer header
+  would prevent this perhaps. Also the checksum, could sometimes be passed
+  through with in incorrect message if the modulus sum of two strings happened
+  to be the same.
+
+DESIGN
+  It's a pretty straightforward layered design. The main or test function calls
+  l5, l5 calls l4, l4 calls l3 and so forth. The l5_write function must be
+  called be l5_read so there is something in the buffer to be read.
+
+SPECIAL BUILDING INSTRUCTIONS
+  Nothing in particular. Just make sure there aren't multiple definitions of
+  functions when testing.
+
+OTHER INFORMATION.

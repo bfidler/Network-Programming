@@ -13,6 +13,7 @@
 
       name of the server (argv[1])
       port number of the server (argv[2])
+      file to be sent to the server (argv[3])
 */
 
 int main( int argc, char **argv ) {
@@ -20,9 +21,10 @@ int main( int argc, char **argv ) {
   int sk;
   struct sockaddr_in skaddr;
   char nextLine[1000];
+  char eot;
 
-  /* first - check to make sure there are 2 command line parameters
-     (argc=3 since the program name is argv[0])
+  /* first - check to make sure there are 3 command line parameters
+     (argc=4 since the program name is argv[0])
   */
 
   if (argc!=4) {
@@ -83,20 +85,26 @@ int main( int argc, char **argv ) {
 
 
   /* attempt to establish a connection with the server */
-
-
+  /* will not work if port and address are different than the server */
   if (connect(sk,(struct sockaddr *) &skaddr,sizeof(skaddr)) < 0 ) {
     printf("Problem connecting socket\n");
     exit(1);
   }
 
-  /* Send a string and finish*/
+  /*  Send a line
+      Wait until transmission character is received
+      repeat
+  */
   while(fgets(nextLine, 1000, readFile)) {
     write(sk,nextLine,strlen(nextLine));
-    printf("%s", nextLine);
-    sleep(0.001);
+    read(sk, &eot, 1);
+    if (eot != 0x04) {
+      printf("Transmission error\n");
+      exit(1);
+    }
   }
-
+  
+  //closing socket and file
   close(sk);
   fclose(readFile);
   return(0);

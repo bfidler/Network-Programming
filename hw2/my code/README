@@ -1,0 +1,22 @@
+Brayden Fidler
+CPSC 3600
+
+My submission is a tcp client/server. The server recieves data from ther server 
+line by line and prints each line backwards.
+
+tcpserver.c
+  This creates a socket to listen for a connection and reverse each line from the
+  connection once it receives data.
+  
+tcpclient.c
+  This creates a socket to connect to the server (given to correct address and port)
+  and sends a file to the server line by line.
+  
+
+The server closes immediately after a client finishes sending, which is what we were told
+to do, but it doesn't make since especially if were listening for more than one 
+connection. Also, when testing if i ended the server before running the client succesfully,
+the port would be occupied for a little while after. Another issue is that, even though 
+the client will not connect if the port or address are incorrect, it doesn't tell you 
+which one is the issue. I'm not really sure how to do that or if it's even possible since
+you haven't actually connected to the server to get the actual port and address.

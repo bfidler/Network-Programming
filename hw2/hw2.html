@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>CpSc 360 Homework 2</TITLE>
+<META content="Microsoft FrontPage 12.0" name=GENERATOR></HEAD>
+<BODY bgColor=white leftMargin=0 topMargin=0 MARGINHEIGHT="0" MARGINWIDTH="0">
+<DIV class=page>
+<H2 style="FONT-SIZE: 16pt; COLOR: black; TEXT-ALIGN: center">CpSc 3600-001 Homework 
+2: 
+TCP Client/Server Program<BR>
+Due Date: March. 3rd&nbsp; (by 11:59PM) </H2>
+<HR>
+<H3>Project Description</H3>
+<P>This project is to write simple TCP client and Server in <b>C or C++. </b>
+Your programs should have the following functions: </P>
+<P class=indent><b>TCP Server</b></P>
+<P class=indent>Your server creates a passive mode TCP socket and waits for 
+client connections at a specified port. Below is an example of a command line 
+that could be used to run your TCP server on port 1234:</P>
+<P class=indent>./tcpserver 1234</P>
+<P class=indent>When a new connection is established, the server reads ASCII 
+data line by line sent by the client. The server then reverses the order of 
+characters in each line and writes it to standard output. Your server should 
+quit when the client finishes sending.</P>
+<P class=indent><b>TCP Client</b></P>
+<P class=indent>Your client connects to the TCP server at the specified port.&nbsp; 
+After successfully connecting to the server, the client reads data from an ASCII 
+file and sends to the TCP server. The client closes the connection after 
+finishing sending the file. Below is an <font color="#FF0000">example</font> of a command line that could be 
+used to run your TCP client on port 1234 and communicate with the server at 
+address 130.127.45.7:</P>
+<P class=indent>./tcpclient&nbsp; 130.127.45.7&nbsp; 1234&nbsp; myfile</P>
+<P class=indent>The first command line parameter must be the server's IP 
+address. The port number in the client program should be the same as the 
+port number in the server program. &quot;myfile&quot; is the name of the ASCII file.</P>
+<H3>What is required:</H3>
+<UL>
+  <LI>
+  Your server and client must use the same port number specified in the command line. 
+  </LI>
+  <LI>
+  Your client should read from the file specified in the third command line 
+  parameter (argv[3]). </LI>
+  <LI>
+  Your client must send the file line by line. You can not send the file at once or character by character. </LI>
+  <LI>
+  Your client should close the connection after finishing sending the file.</LI>
+  <LI>
+  Your server must read the data line by line, and reverse the order of characters in each line and output the reversed lines to the terminal.</LI>
+  <LI>
+  Your server must quit when client closes the connection.</LI>
+</UL>
+<H3>Deliverables</H3>
+<P>You must submit all the source code necessary for us to build and test your 
+TCP client and server. You must also include Makefile that can be used to build your 
+client and server on the CS Sun workstations. If you don't know how to use make or create a Makefile, refer to the
+sample TCP client and server code. Feel free to ask for help 
+in creating a Makefile. </P>
+<P>You must also include in your submission a file named <CODE>README</CODE> 
+that includes your name and a brief description of your submission, including 
+the name of each file submitted along with a one line description of what is in 
+the file. If your code is not complete, tell us what works and what doesn't. If 
+you are submitting code that does not compile, please tell us that as well. If 
+any of your code was written by someone else, you are required to tell us about 
+it (this must also be documented in the code itself). Finally, feel free to 
+include a description of any problems you had or anything else you think might 
+be helpful to us. </P>
+<H3>Grading</H3>
+<P>Your project will be tested to make sure it works properly. Here is a rough breakdown of the grading:</P>
+<TABLE cellSpacing=10 border=0>
+  <TBODY>
+  <TR>
+    <TD>TCP Server</TD>
+    <TD>40%</TD>
+  <TR>
+    <TD>TCP Client</TD>
+    <TD>40%</TD>
+  <TR>
+    <TD>Submission, Error handling, Style/Code structure, etc.</TD>
+    <TD>20%</TD>
+  </TBODY></TABLE>
+<P>NOTE: 20% of your homework grade depends on the how "well your code is 
+written". These points include the following:</P>
+<UL>
+  <LI>
+  Error handling (check every system call for an error!).</LI>
+  <LI>
+  Safe code (avoiding buffer overflow, etc).</LI>
+  <LI>
+  <P>How well we can understand your code. There is no required format for your 
+	code. However, providing appropriate commends is needed to make sure that 
+	other competent programmers could easily understand and make changes to your 
+	code.</P></LI></UL>
+<H3>Submitting your files</H3>
+	<font face="Arial">All projects must be submitted via handin: </font>
+	<span style="FONT-FAMILY: 'Times New Roman','serif'; FONT-SIZE: 12pt; mso-fareast-font-family: SimSun; mso-fareast-theme-font: minor-fareast; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">
+	<a href="https://handin.cs.clemson.edu">https://handin.cs.clemson.edu</a></span><P><font face="Arial">
+Please make sure you submit all your source files not the object files.&nbsp; 
+You can also zip the files using the following command first:</font><P>&nbsp;
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; tar&nbsp;&nbsp; 
+cvzf&nbsp;&nbsp; hw2.tgz&nbsp;&nbsp; file1&nbsp; file2&nbsp;&nbsp; file3&nbsp; 
+...</font><P><font face="Arial">and submit the 
+single zip file hw2.tgz.&nbsp; Before you submit this single file, please use 
+the following command to check make sure you have everything in this zip file:</font><P>
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+&gt; tar&nbsp;&nbsp; tvzf&nbsp;&nbsp; hw2.tgz</font><P><B>Don't send compiled code! Please ask question if you don't understand any 
+part of this project.</B></P>
+<H3>&nbsp;</H3><BR><BR></DIV></BODY></HTML>

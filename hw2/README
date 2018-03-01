@@ -1,0 +1,44 @@
+Simple TCP client and server. 
+
+The server creates a passive mode TCP socket and waits for connections
+(after printing out the port assigned by the operating system).  Each
+time a new connection is established, the server reads whatever it can
+from the port and writes it to standard output. The server knows when
+the client is done when a 0 is returned by read() - which indicates
+the other end has closed the connection.
+
+The server also uses getsockname() to find out the IP address and port 
+number of the client, and prints this stuff out.
+
+-----------------
+
+The client attempts to connect to the TCP indicated by the command line
+parameters. The parameters are the IP address (in dotted decimal notation)
+and the port number. For example, to tell the client that the server
+is running on the machine with IP address 130.127.1.100 and on port 2020
+the client should be started like this:
+
+client 130.127.1.100 2020
+
+The client code assumes that the IP address is a number, there is no
+attempt to lookup the address of a named computer (you can't say
+"foo.cs.clemson.edu"). 
+
+Once the client establishes a connection it send the string
+"Networking Rules!!!" and then closes the connection. The client
+does not read anything from the socket.
+
+--------------------------
+
+client1 is a client that is idential to client, but supports machine
+names (so you can say "foo.cs.clemson.edu").
+
+
+Questions should be sent to james.wang@cs.clemson.edu
+
+
+
+
+
+
+

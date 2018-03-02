@@ -6,6 +6,8 @@
 #include <netinet/in.h> /* INET constants and stuff */
 #include <arpa/inet.h>	/* IP address conversion stuff */
 #include <string.h>
+#include <netdb.h>
+
 
 /* client program:
 
@@ -22,6 +24,7 @@ int main( int argc, char **argv ) {
   struct sockaddr_in skaddr;
   char nextLine[1000];
   char eot;
+  struct hostent *hp;
 
   /* first - check to make sure there are 3 command line parameters
      (argc=4 since the program name is argv[0])
@@ -55,27 +58,37 @@ int main( int argc, char **argv ) {
 
   skaddr.sin_family = AF_INET;
 
-#ifndef SUN
-  if (inet_aton(argv[1],&skaddr.sin_addr)==0) {
-    printf("Invalid IP address: %s\n",argv[1]);
-    exit(1);
-  }
-#else
-  /*inet_aton is missing on Solaris - you need to use inet_addr! */
-  /* inet_addr is not as nice, the return value is -1 if it fails
-     (so we need to assume that is not the right address !)
-  */
+  /* convert argv[1] to a network byte order binary IP address */
+  /* First try to convert using gethostbyname */
+  if ((hp = gethostbyname(argv[1]))!=0) {
+    /* Name lookup was successful - copy the IP address */
+    memcpy( &skaddr.sin_addr.s_addr, hp->h_addr, hp->h_length);
+  } else {
 
-  skaddr.sin_addr.s_addr = inet_addr(argv[1]);
-  if (skaddr.sin_addr.s_addr ==-1) {
-    printf("Invalid IP address: %s\n",argv[1]);
-    exit(1);
-  }
+    /* Name lookup didn't work, try converting from dotted decimal */
+
+#ifndef SUN
+    if (inet_aton(argv[1],&skaddr.sin_addr)==0) {
+      printf("Invalid IP address: %s\n",argv[1]);
+      exit(1);
+    }
+#else
+    /*inet_aton is missing on Solaris - you need to use inet_addr! */
+    /* inet_addr is not as nice, the return value is -1 if it fails
+       (so we need to assume that is not the right address !)
+    */
+
+    skaddr.sin_addr.s_addr = inet_addr(argv[1]);
+    if (skaddr.sin_addr.s_addr ==-1) {
+      printf("Invalid IP address: %s\n",argv[1]);
+      exit(1);
+    }
 #endif
+  }
 
   skaddr.sin_port = htons(atoi(argv[2]));
 
-  /*opening file to read input from*/
+  //opening read file
   FILE *readFile = fopen(argv[3], "r");
 
   if (readFile == NULL) {
@@ -103,7 +116,7 @@ int main( int argc, char **argv ) {
       exit(1);
     }
   }
-  
+
   //closing socket and file
   close(sk);
   fclose(readFile);

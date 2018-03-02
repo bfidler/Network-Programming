@@ -21,15 +21,12 @@
 
 
 int main(int argc, char**argv) {
-  
+
   int sockfd,newsockfd, portno;
   struct sockaddr_in skaddr;
   struct sockaddr_in cliaddr;
   int addrlen,length;
   int serverOn = 1;
-  
-  /*getting ip address of server*/
-  struct hostent *koala6 = gethostbyname("koala6.cs.clemson.edu");
 
   char buff[1000];
   char eot = (char)0x04;
@@ -53,14 +50,13 @@ int main(int argc, char**argv) {
 
   /*establish our address
    address family is AF_INET
-   IP address is koala6's
+   IP address is INADDR_ANY
    the port number is assigned by the command line
   */
   portno = atoi(argv[1]);
   skaddr.sin_family = AF_INET;
-  memcpy(&skaddr.sin_addr.s_addr, koala6->h_addr_list[0], 
-    sizeof(struct in_addr));
-    
+  skaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
   if (portno > 65535) {
     printf("Error, port number to big.\n");
     exit(1);
@@ -74,14 +70,14 @@ int main(int argc, char**argv) {
     exit(0);
   }
 
-  
+
   /*getting the name of the socket*/
   length = sizeof( skaddr );
   if (getsockname(sockfd, (struct sockaddr *) &skaddr, &length)<0) {
     perror("Error getsockname\n");
     exit(1);
   }
-  
+
   /* print out port and IP address of server*/
   printf("The Server socket port number is %d\n",ntohs(skaddr.sin_port));
   printf("The Server IP address is %s\n", inet_ntoa(skaddr.sin_addr));
@@ -129,9 +125,9 @@ int main(int argc, char**argv) {
         rev[i] = buff[n - i - 1];
 
       write(1,rev,n);
-      write(newsockfd, &eot, 1); 
+      write(newsockfd, &eot, 1);
     }
-    
+
     //close sockets and end server
     printf("\n\nDone with connection - closing\n\n");
     close(newsockfd);

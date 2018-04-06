@@ -106,6 +106,7 @@ static void * doit(void *arg){
 char * getTime(){
   time_t myTime = time(NULL);
   char * myTime_str = ctime(&myTime);
+  myTime_str[strlen(myTime_str)-1] = *"\0";
   return myTime_str;
 }
 

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>CpSc 360 Homework 3</TITLE>
+<META content="Microsoft FrontPage 12.0" name=GENERATOR>
+<style type="text/css">
+.style1 {
+	font-family: "Times New Roman";
+}
+.style2 {
+	font-size: 10.5pt;
+	font-family: Consolas;
+	margin-left: 0in;
+	margin-right: 0in;
+	margin-top: 0in;
+	margin-bottom: .0001pt;
+}
+</style>
+</HEAD>
+<BODY bgColor=white leftMargin=0 topMargin=0 MARGINHEIGHT="0" MARGINWIDTH="0">
+<DIV class=page>
+<H2 style="FONT-SIZE: 16pt; COLOR: black; TEXT-ALIGN: center">CpSc 3600-001 Homework 
+4: 
+Concurrent TCP Client/Server Program<BR>
+Due Date: April 19th (by 11:59PM) </H2>
+<HR>
+<H3>Project Description</H3>
+<P>This project is to write concurrent TCP client and server programs in <b>C or C++. </b>
+Your programs should have the following functions: </P>
+<P class=indent><b>TCP Client</b></P>
+<P class=indent>Your client first sends a message to the server, indicating the name of an ASCII file to be sent to the server. 
+Then your client waits for an ACK message from the server to start sending the data. The client also receives the filename (different from the one sent by the client) 
+that the server will use to store the received data within this first ACK message. After that, the client reads one line at a time from the file and sends 
+to the server. The client needs to get an ACK message from the server before sending the next line. 
+The client may receive an error message from the server during the transmission. If an error message is received, the client should report
+the error and exit.<br/><br/>
+Below is an example of a command line that could be used to run your TCP client on port 1234 and send a file specified by "myfile" to the TCP server at 
+address 130.127.45.7:</P>
+<P class=indent>./client&nbsp; 130.127.45.7&nbsp; 1234&nbsp; myfile</P>
+<P class=indent>The first command line parameter (argv[1]) must be the TCP server's IP address. </br>
+The second parameter (argv[2]) is the port number that will be used by both the client and server programs. </br>
+The third parameter (argv[3]) is the name of the ASCII file to be sent to the server.</P>
+<P class=indent><b>TCP Server</b></P>
+<P class=indent>Your server creates a TCP socket and waits for the
+client to send data at a port specified by the command line parameter. 
+The server first receives the filename from the TCP client and create an ASCII file for writing. 
+Since this is a concurrent server, your server must create a filename that not only reflects the original filename in the client
+but also avoids the name conflict with the other clients. After the file is created, the server should send an ACK message along with
+the filename to the client so that the client can start the data transmission. The server will then read ASCII 
+data line by line sent by the client, and reverse the order of 
+characters in each line and write it to the file opened by the server. The server must send an ACK message for each line it receives. 
+Below is an example of a command line that could be used to run your TCP server on port 1234:</P>
+<P class=indent>./server 1234</P>
+<P class=indent> You must implement your concurrent TCP server using  multi-thread method.
+</P>
+
+<H3>What is required:</H3>
+<UL>
+  <LI>
+  You must design an appropriate application layer protocol for your client and server communication.</LI>
+  <LI>
+  You must implement the server using  multi-thread. </LI>
+  <LI>
+ Your server must avoid filename conflict from multiple clients. For instance, you can use the combination of the filename 
+ from the client and the time that the request is received as the server-side filename. </LI>
+  <LI>
+  Your client must send the file line by line. You can not send the file at once or character by character. </LI>
+  <LI>
+  Your client should tell the server when it finishes sending the file.
+  </LI>
+  <LI>
+  Your server must reverse the order of characters in each line and store the reversed line in the proper server-side file.</LI>
+  
+</UL>
+<H3>Deliverables</H3>
+<P>You must submit all the source code necessary for us to build and test your 
+concurrent TCP client and server. These files must include server programs and one client program. 
+You must also include Makefile that can be used to build your client and server 
+on the CS Li<span class="style1">nux workstations</span>. </P>
+<P>You must also include in your submission a file named <CODE>README</CODE> 
+that includes your name and a brief description of your submission, including 
+the name of each file submitted along with a one line description of what is in 
+the file. If your code is not complete, tell us what works and what doesn't. If 
+you are submitting code that does not compile, please tell us that as well. If 
+any of your code was written by someone else, you are required to tell us about 
+it (this must also be documented in the code itself). Finally, feel free to 
+include a description of any problems you had or anything else you think might 
+be helpful to us. </P>
+<H3>Grading</H3>
+<P>Your project will be tested to make sure it works properly. Here is a rough breakdown of the grading:</P>
+<TABLE cellSpacing=10 border=0>
+  <TBODY>
+    <TR>
+    <TD>Multi-thread TCP Server</TD>
+    <TD>60%</TD>
+  <TR>
+    <TD>TCP Client</TD>
+    <TD>20%</TD>
+  <TR>
+    <TD>Submission, Error handling, Style/Code structure, etc.</TD>
+    <TD>20%</TD>
+  </TBODY></TABLE>
+<P>NOTE: 20% of your homework grade depends on the how "well your code is 
+written". These points include the following:</P>
+<UL>
+  <LI>
+  Error handling (check every system call for an error!).</LI>
+  <LI>
+  Safe code (avoiding buffer overflow, etc).</LI>
+  <LI>
+  <P>How well we can understand your code. There is no required format for your 
+  code, there is <B>no</B> requirement like "you must have one comment for every 
+  5 lines of code". Feel free to provide whatever level of commenting you 
+  believe is appropriate to make sure that other competent programmers could 
+  easily understand and make changes to your code.</P></LI></UL>
+<H3>Submitting your files</H3>
+<P><font face="Arial">All projects must be submitted via handin: </font>
+<span style="FONT-FAMILY: 'Times New Roman','serif'; FONT-SIZE: 12pt; mso-fareast-font-family: SimSun; mso-fareast-theme-font: minor-fareast; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">
+<a href="https://handin.cs.clemson.edu">https://handin.cs.clemson.edu</a></span><P><font face="Arial">
+Please make sure you submit all your source files not the object files.&nbsp; 
+You can also zip the files using the following command first:</font>
+<P>&nbsp;
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; tar&nbsp;&nbsp; 
+cvzf&nbsp;&nbsp; hw4.tgz&nbsp;&nbsp; file1&nbsp; file2&nbsp;&nbsp; file3&nbsp; 
+...</font><P><font face="Arial">and submit the 
+single zip file hw3.tgz.&nbsp; Before you submit this single file, please use 
+the following command to check make sure you have everything in this zip file:</font>
+<P>
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+&gt; tar&nbsp;&nbsp; tvzf&nbsp;&nbsp; hw4.tgz</font><p class="style2"><B>Don't send compiled code! Please ask question if you don't understand any 
+  part of this project.</B></p>
+<H3>Resources/Links:&nbsp; Please see the sample codes of the book.</H3>
+<BR><BR></DIV></BODY></HTML>

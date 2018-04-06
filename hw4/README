@@ -1,0 +1,14 @@
+Brayden Fidler
+
+This submission is a multithreaded client/server program where the server creates
+a file based off the file from the client. The server reverses each lines sent by
+the client
+
+Server - Creates a file with the timestamp for each client and writes each line
+	reversed. It uses threads rather than forks
+
+Client - Connects to the server based off IP and Port number and opens a file to
+	send to the server
+
+Makefile - Compiles the client and server and can remove executables and .o files
+	as well.

@@ -7,6 +7,7 @@
 #include <time.h> /*For appending time to file name*/
 #include <stdlib.h> /*standard library*/
 #include <string.h> /*Strings*/
+#include <pthread.h> /*Posix Threads*/
 
 
 /*Prototypes*/
@@ -73,7 +74,7 @@ int main (int argc, char**argv) {
     /* locking before using connfd in call to pthread_create*/
     pthread_mutex_lock(&at_mutex);
     pthread_create(&tid, NULL, &doit, &connfd);
-    ptread_unlock(&at_mutex);
+    pthread_mutex_unlock(&at_mutex);
   }
 
 
@@ -94,7 +95,7 @@ static void * doit(void *arg){
   /*checking for error processing connection*/
   if(processConnection(connfd) == -1) {
     close(connfd);
-    pthread_exit(1);
+    pthread_exit((void *) -1);
   }
 
   close(connfd);
@@ -124,7 +125,7 @@ int processConnection (int conn){
   /*creating a unique file based on time*/
   strncat(filename, "-", 255 - sizeof(filename));
   strncat(filename, getTime(), 255 - sizeof(filename));
-  strncat(filename, ".txt\0", 255 - sizeof(filename));
+  strncat(filename, ".txt", 255 - sizeof(filename));
   FILE *fp = fopen(filename, "w");
 
   if (fp == NULL) {

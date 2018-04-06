@@ -7,7 +7,7 @@ CFLAG= -DSUN
 # This rule describes how to build a .o file from a .c file
 # -Wall tells gcc to print all warnings!
 
-.c.o:	gcc -c -Wall ${CFLAG} $<
+.c.o:	gcc -c -Wall ${CFLAG} $< 
 
 
 
@@ -21,7 +21,7 @@ all: server client
 # does no harm!
 
 server: server.o
-	gcc -o server server.o
+	gcc -o server server.o -lpthread
 
 client: client.o
 	gcc -o client client.o

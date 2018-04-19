@@ -13,9 +13,12 @@
 /*Prototypes*/
 char * getTime();
 int processConnection(int conn);
+int MAX_THREADS = 5;
+int active_threads = 0;
 static void *doit(void *arg);
 /*mutex for locking connfd*/
 pthread_mutex_t at_mutex  = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t at_cond = PTHREAD_COND_INITIALIZER;
 
 int main (int argc, char**argv) {
 
@@ -70,10 +73,15 @@ int main (int argc, char**argv) {
       perror("Problem with accept call\n");
       exit(1);
     }
+	
+	/* locking before using connfd in call to pthread_create*/
+	pthread_mutex_lock(&at_mutex);
+	if(active_threads < MAX_THREADS) {
+		active_threads++;
+		pthread_create(&tid, NULL, &doit, &connfd);
+	}
 
-    /* locking before using connfd in call to pthread_create*/
-    pthread_mutex_lock(&at_mutex);
-    pthread_create(&tid, NULL, &doit, &connfd);
+    pthread_cond_wait(&at_cond, &at_mutex);
     pthread_mutex_unlock(&at_mutex);
   }
 
@@ -89,7 +97,7 @@ static void * doit(void *arg){
   pthread_mutex_lock(&at_mutex);
   int connfd = * ((int *) arg);
   pthread_mutex_unlock(&at_mutex);
-
+  
   pthread_detach(pthread_self());
 
   /*checking for error processing connection*/
@@ -97,6 +105,12 @@ static void * doit(void *arg){
     close(connfd);
     pthread_exit((void *) -1);
   }
+
+  /*deincrementing active threads and sending cond signal*/
+  pthread_mutex_lock(&at_mutex);
+  active_threads--;
+  pthread_cond_signal(&at_cond);
+  pthread_mutex_unlock(&at_mutex);
 
   close(connfd);
   return (NULL);
@@ -113,6 +127,7 @@ char * getTime(){
 
 int processConnection (int conn){
 
+  
   char buff[9999];
   char filename[256];
   int n;

@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>CpSc 360 Homework 6</TITLE>
+<META content="Microsoft FrontPage 12.0" name=GENERATOR></HEAD>
+<BODY bgColor=white leftMargin=0 topMargin=0 MARGINHEIGHT="0" MARGINWIDTH="0">
+<DIV class=page>
+<H2 style="FONT-SIZE: 16pt; COLOR: black; TEXT-ALIGN: center">CpSc 3600-001 Homework 
+5: 
+RPC Client/Server Program<BR>
+Due Date: April 29th (by 11:59PM) </H2><HR>
+<H3>Project Description</H3>
+<P>This project is to write RPC client and server programs in <b>C or C++.&nbsp; 
+</b>Your programs should have the following functions: </P>
+<P class=indent><b>RPC Name Server</b></P>
+<P class=indent>Your name server will maintain a configuration file that store 
+information, like name, hostname, about other RPC servers. The name server will 
+have two functions. One is for other RPC servers to register with Name Server. The 
+other is for RPC clients to get hostname about RPC servers by 
+their name. When there is a RPC server register with Name server, it will update 
+the configuration file.  
+When there is a request from client, it will read the information from 
+configuration file. Here are functions/procedures needed to implemented by Name server.</P>
+<P class=indent>int registerServer(char [] name, char[] hostname);</P>
+<P class=indent>int removeServer(char[] name);</P>
+<P class=indent>string getServerHostName(char [] name);</P>
+<div class="page">
+	<p class="indent">Below is an example of a command line that could be used 
+	to run your RPC Name server:</p>
+	<p class="indent">./NameServer</div>
+<P class=indent><b>RPC File Server</b></P>
+<P class=indent>Your RPC File Server will be a server for client to retrieve 
+files and a client of RPC Name Server. When your RPC File Server starts, it will 
+first run as a RPC client to register its hostname to RPC name server. You can 
+implement the File server in two processes. Your parent process will be the RPC 
+client to the Name server. After registering with Name server, you will use 
+fork() to create a child process to execute the RPC file server function. The 
+file sever will be an iterative server and it will handle one client a time. The 
+File server will only have one function to let client get a file by its name:</P>
+<P class=indent>string getFile ( char [] name);</P>
+<p class="indent">Below is an example of a command line that could be used to 
+run RPC File server:</p>
+<p class="indent">./FileServer spider2.cs.clemson.edu</p>
+<p class="indent">The first command line parameter (argv[1]) must be the 
+	host name of RPC Name server. </p>
+<H3><b><font size="3">RPC Client</font></b></H3>
+<p>Your RPC Client will be both client to RPC name server and RPC file server. 
+The RPC Client will first be a client of RPC Name server and call a remote 
+procedure to get the hostname about the RPC file server. Then, the RPC client 
+will be a client of RPC file server to retrieve a file. The file name will pass 
+through arguments of RPC Client. </p>
+<div class="page">
+	<p class="indent">Below is an example of a command line that could be used 
+	to run your RPC client and require a file specified by &quot;myfile&quot;:</p>
+	<p class="indent">./client&nbsp; spider2.cs.clemson.edu&nbsp;&nbsp;FileServer myfile</p>
+	<p class="indent">The first command line parameter (argv[1]) must be the 
+	host name of RPC Name server. <br>The second parameter (argv[2]) is the name of the the file server.<br>
+	The third parameter (argv[3]) is the name of the ASCII file to be retrieve 
+	from the file server.
+<H3>Deliverables</H3>
+<P>You must submit all the source code necessary for us to build and test your 
+RPC client and server. These files must include two server programs and one 
+client program. You must also include Makefile that can be used to build your 
+client and server on the CS Linux workstations. </P>
+<P>You must also include in your submission a file named <CODE>README</CODE> 
+that includes your name and a brief description of your submission, including 
+the name of each file submitted along with a one line description of what is in 
+the file. If your code is not complete, tell us what works and what doesn't. If 
+you are submitting code that does not compile, please tell us that as well. If 
+any of your code was written by someone else, you are required to tell us about 
+it (this must also be documented in the code itself). Finally, feel free to 
+include a description of any problems you had or anything else you think might 
+be helpful to us. </P>
+<H3>Grading</H3>
+<P>Your project will be tested to make sure it works properly. Here is a rough breakdown of the grading:</P>
+<TABLE cellSpacing=10 border=0>
+	<TBODY>
+		<TR>
+			<TD>RPC Name Server</TD>
+			<TD>20%</TD>
+		<TR>
+			<TD>RPC File Server</TD>
+			<TD>30%</TD>
+		<TR>
+			<TD>RPC Client</TD>
+			<TD>30%</TD>
+		<TR>
+			<TD>Error handling, Style/Code structure, etc.</TD>
+			<TD>20%</TD>
+	</TBODY>
+</TABLE>
+<P>NOTE: 20% of your homework grade depends on the how "well your code is 
+written". These points include the following:</P>
+<UL>
+	<LI>Error handling (check every system call for an error!).</LI>
+	<LI>Safe code (avoiding buffer overflow, etc).</LI>
+	<LI>
+	<P>How well we can understand your code. There is no required format for your 
+  code, there is <B>no</B> requirement like "you must have one comment for every 
+  5 lines of code". Feel free to provide whatever level of commenting you 
+  believe is appropriate to make sure that other competent programmers could 
+  easily understand and make changes to your code.</P></LI>
+</UL>
+<H3>Submitting your files</H3>
+	<font face="Arial">All projects must be submitted via handin: </font>
+	<span style="FONT-FAMILY: 'Times New Roman','serif'; FONT-SIZE: 12pt; mso-fareast-font-family: SimSun; mso-fareast-theme-font: minor-fareast; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">
+	<a href="https://handin.cs.clemson.edu">https://handin.cs.clemson.edu</a></span><P><font face="Arial">Please make sure you submit all your source files not the object files.&nbsp; 
+You can also zip the files using the following command first:</font>
+	<P>&nbsp;
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; tar&nbsp;&nbsp; 
+cvzf&nbsp;&nbsp; hw5.tgz&nbsp;&nbsp; file1&nbsp; file2&nbsp;&nbsp; file3&nbsp; 
+...</font><P><font face="Arial">and submit the 
+single zip file hw6.tgz.&nbsp; Before you submit this single file, please use 
+the following command to check make sure you have everything in this zip file:</font>
+<P>
+<font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+&gt; tar&nbsp;&nbsp; tvzf&nbsp;&nbsp; hw5.tgz</font><P><B>Don't send compiled code! Please ask question if you don't understand any 
+part of this project.</B></P>
+<H3>Resources/Links:&nbsp; Please see the sample codes of the book.</H3><BR><BR></DIV></BODY></HTML>

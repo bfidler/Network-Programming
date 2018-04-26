@@ -7,15 +7,30 @@
 #include "NameServer.h"
 #include <string.h>
 
+
 int *
 registerserver_1_svc(regName *argp, struct svc_req *rqstp)
 {
-        static int  result;
+        static int result;
 
-        /*
-         * insert server code here
-         */
+        /*Opening configuration file*/
+        FILE *fp = fopen("config.txt", "a");
 
+        /*Checking that file was openeded*/
+        if (fp == NULL){
+           printf("Trouble opening config file.\n");
+           result = -1;
+           return &result;
+        }
+
+        /*Writing name and host on separate lines*/
+        fprintf(fp, "%s\n", argp->name);
+        fprintf(fp, "%s\n", argp->hostname);
+
+        fclose (fp);
+
+        /*Success*/
+        result = 1;
         return &result;
 }
 
@@ -27,6 +42,7 @@ removeserver_1_svc(remName *argp, struct svc_req *rqstp)
         /*
          * insert server code here
          */
+         result = 1;
 
         return &result;
 }
@@ -36,9 +52,38 @@ getserverhostname_1_svc(getName *argp, struct svc_req *rqstp)
 {
         static char * result;
 
-        /*
-         * insert server code here
-         */
+        /*Opening configuration file*/
+        FILE *fp = fopen("config.txt", "r");
 
+        /*Checking that file was openeded*/
+        if (fp == NULL){
+           printf("Trouble opening config file.\n");
+           return &result;
+        }
+
+        char namebuff[256];
+
+        /*searching for host using the name*/
+        while(fgets(namebuff, 256, fp)){
+          /*Removing new line char*/
+          if (strlen(namebuff) > 0 && namebuff[strlen(namebuff) - 1] == '\n') {
+            namebuff[strlen(namebuff)] = '\0';
+          }
+
+          /*If the name is found, host is stored and returned in result*/
+          if(strcmp(argp->name,namebuff) == 0) {
+            fgets(result, 256, fp);
+            fclose(fp);
+            return &result;
+          }
+          else {
+            fgets(namebuff, 256, fp);
+          }
+
+        /*Host not found if function makes it here*/
+        printf("Could not locate host name.\n");
+
+        fclose(fp);
         return &result;
+      }
 }

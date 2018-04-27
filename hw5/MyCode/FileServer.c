@@ -12,15 +12,20 @@ getfile_1_svc(flName *argp, struct svc_req *rqstp)
 {
 	static char * result;
 
-	/*
-	 * insert server code here
-	 */
+	FILE *fp = fopen(argp->name, "r");
+	char buff[1000];
+
+	/*Checking that file was openeded*/
+	if (fp == NULL){
+		 printf("Could not open file.\n");
+		 return &result;
+	}
+
+
+	/*Reading file into the result string*/
+	while(fgets(buff, 1000, fp)){
+		strcat(result, buff);
+	}
 
 	return &result;
-}
-
-
-int main (int argc, char * argv[])
-
-	return 0;
 }

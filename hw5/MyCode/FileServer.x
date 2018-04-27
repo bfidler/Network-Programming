@@ -3,7 +3,7 @@
 
 /*Operands for functions*/
 struct flName {
-  char* name;
+  char name[];
 };
 
 /*File Server program*/

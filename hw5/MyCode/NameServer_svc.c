@@ -99,6 +99,7 @@ main (int argc, char **argv)
 		exit(1);
 	}
 
+	printf("%s\n", "Running NameServer..." );
 	svc_run ();
 	fprintf (stderr, "%s", "svc_run returned");
 	exit (1);

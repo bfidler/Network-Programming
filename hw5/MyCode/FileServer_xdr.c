@@ -11,7 +11,7 @@ xdr_flName (XDR *xdrs, flName *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->name, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->name, ~0))
 		 return FALSE;
 	return TRUE;
 }

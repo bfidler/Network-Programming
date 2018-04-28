@@ -3,12 +3,12 @@
 
 /*Operands for functions*/
 struct flName {
-  char name[];
+  string name<>;
 };
 
 /*File Server program*/
 program FILE_SERVER {
-  version NAME_VERSION {
+  version FILE_VERSION {
     string getFile (flName) = 1;
   } = VERSION_NUMBER;
 } = 2222222;

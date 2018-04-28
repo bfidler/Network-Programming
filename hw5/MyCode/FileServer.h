@@ -21,7 +21,7 @@ struct flName {
 typedef struct flName flName;
 
 #define FILE_SERVER 2222222
-#define NAME_VERSION 1
+#define FILE_VERSION 1
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define getFile 1

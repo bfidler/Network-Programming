@@ -25,7 +25,6 @@ registerserver_1_svc(regName *argp, struct svc_req *rqstp)
 
         /*Writing name and host on separate lines*/
         fprintf(fp, "%s\n", argp->name);
-        fprintf(stdout, "%s\n", argp->name);
         fprintf(fp, "%s\n", argp->hostname);
 
         fclose (fp);
@@ -52,7 +51,7 @@ char **
 getserverhostname_1_svc(getName *argp, struct svc_req *rqstp)
 {
         static char * result;
-
+        result = (char *) malloc(256*sizeof(char));
         /*Opening configuration file*/
         FILE *fp = fopen("config.txt", "r");
 
@@ -66,9 +65,11 @@ getserverhostname_1_svc(getName *argp, struct svc_req *rqstp)
 
         /*searching for host using the name*/
         while(fgets(namebuff, 256, fp)){
+          int len = strlen(namebuff);
+
           /*Removing new line char*/
-          if (strlen(namebuff) > 0 && namebuff[strlen(namebuff) - 1] == '\n') {
-            namebuff[strlen(namebuff)] = '\0';
+          if (len > 0 && namebuff[len - 1] == '\n') {
+            namebuff[--len] = '\0';
           }
 
           /*If the name is found, host is stored and returned in result*/

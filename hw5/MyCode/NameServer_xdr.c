@@ -11,9 +11,9 @@ xdr_regName (XDR *xdrs, regName *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->name, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->name, ~0))
 		 return FALSE;
-	 if (!xdr_pointer (xdrs, (char **)&objp->hostname, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->hostname, ~0))
 		 return FALSE;
 	return TRUE;
 }
@@ -23,7 +23,7 @@ xdr_remName (XDR *xdrs, remName *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->name, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->name, ~0))
 		 return FALSE;
 	return TRUE;
 }
@@ -33,7 +33,7 @@ xdr_getName (XDR *xdrs, getName *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->name, sizeof (char), (xdrproc_t) xdr_char))
+	 if (!xdr_string (xdrs, &objp->name, ~0))
 		 return FALSE;
 	return TRUE;
 }

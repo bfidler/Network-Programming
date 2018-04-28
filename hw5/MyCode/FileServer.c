@@ -11,6 +11,7 @@ char **
 getfile_1_svc(flName *argp, struct svc_req *rqstp)
 {
 	static char * result;
+	result = (char*)malloc(1000*10000*sizeof(char*));
 
 	FILE *fp = fopen(argp->name, "r");
 	char buff[1000];

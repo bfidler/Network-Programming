@@ -4,16 +4,16 @@
 /*Operands for functions*/
 
 struct regName {
-  char name[];
-  char hostname[];
+  string name<>;
+  string hostname<>;
 };
 
 struct remName {
-  char name[];
+  string name<>;
 };
 
 struct getName {
-  char name[];
+  string name<>;
 };
 
 /*Name Server program*/

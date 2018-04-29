@@ -1,12 +1,2 @@
 FileServer
-localhost
-FileServer
-localhost
-FileServer
-localhost
-FileServer
-localhost
-FileServer
-localhost
-FileServer
-localhost
+koala6.cs.clemson.edu

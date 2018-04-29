@@ -85,7 +85,7 @@ getserverhostname_1_svc(getName *argp, struct svc_req *rqstp)
 
         /*Host not found if function makes it here*/
         printf("Could not locate host name.\n");
-
+        result[0] = '\0';
         fclose(fp);
         return &result;
 }

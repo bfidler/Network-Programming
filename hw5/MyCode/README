@@ -1,0 +1,7 @@
+There are many files, so I'm not going to list them all but basically there's the
+files for NameServer, the files for FileServer, and the client file.
+
+Everything works just fine except when I call client create on the host for the file
+server, it doesn't connect. I used the same host as the name server but it doesn't
+work for the file server for whatever reason. Everything else seems to be working
+though and I think I have the structure correct.

@@ -12,8 +12,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "NameServer.h"
-#include <sys/types.h>
 #include <unistd.h>
+#include <sys/types.h>
 
 #ifndef SIG_PF
 #define SIG_PF void(*)(int)
@@ -60,6 +60,7 @@ file_server_1(struct svc_req *rqstp, register SVCXPRT *transp)
 	}
 	return;
 }
+
 
 int
 main (int argc, char **argv)
